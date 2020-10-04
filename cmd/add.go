@@ -26,6 +26,7 @@ import (
 	"github.com/spf13/cobra"
 	"kcc/internal/service"
 	"kcc/internal/storage"
+	"kcc/tools"
 )
 
 var s service.Service
@@ -36,11 +37,27 @@ var addCmd = &cobra.Command{
 	Short: "Store service credentials",
 	Long: `Examples:
 
-kcc add -s facebook.com -u john@doe.com -p secret
-kcc add -s 176.69.100.144 -u johndoe -p secret`,
+kcc add -s facebook.com -u john@doe.com
+kcc add -s 176.69.100.144 -u johndoe`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if _, err := storage.S.Add(s); err != nil {
+		if s.User == "" || len(s.User) == 0 {
+			fmt.Println("Invalid user")
+			return
+		}
+
+		if s.Service == "" || len(s.Service) == 0 {
+			fmt.Println("Invalid service")
+			return
+		}
+
+		password, err := tools.Input("Enter service password: ")
+		if err != nil {
 			fmt.Println(err)
+			return
+		}
+
+		s.Password = password
+		if _, err := storage.S.Add(s); err != nil {
 		} else {
 			fmt.Println("Ok")
 		}
@@ -50,6 +67,5 @@ kcc add -s 176.69.100.144 -u johndoe -p secret`,
 func init() {
 	rootCmd.AddCommand(addCmd)
 	addCmd.Flags().StringVarP(&s.User, "user", "u", "", "The user name")
-	addCmd.Flags().StringVarP(&s.Host, "service", "s", "", "The service name")
-	addCmd.Flags().StringVarP(&s.Password, "password", "p", "", "The user password")
+	addCmd.Flags().StringVarP(&s.Service, "service", "s", "", "The service name")
 }

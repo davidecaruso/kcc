@@ -38,7 +38,7 @@ var rootCmd = &cobra.Command{
 	Short: "KeyChainClipboard",
 	Long: `Store your services' credentials and load passwords in clipboard when you need them:
 
-kcc add -s facebook.com -u john@doe.com -p secret
+kcc add -s facebook.com -u john@doe.com
 kcc get -s facebook.com -u john@doe.com`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
@@ -56,16 +56,6 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.kcc.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.

@@ -48,3 +48,9 @@ func Confirm(s string) bool {
 		}
 	}
 }
+
+func Input(s string) (string, error) {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print(s)
+	return reader.ReadString('\n')
+}

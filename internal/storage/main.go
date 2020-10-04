@@ -40,11 +40,11 @@ type Storage struct {
 
 var (
 	cwd, _ = os.Getwd()
-	S      = Storage{path: cwd + "/assets/.hosts"}
+	S      = Storage{path: cwd + "/assets/.storage"}
 )
 
 func (s *Storage) lock() error {
-	cmd := exec.Command("/bin/sh", "-c", "sudo chown root:root "+s.path)
+	cmd := exec.Command("/bin/sh", "-c", "sudo chown 0:0 "+s.path)
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -130,7 +130,7 @@ func (s *Storage) Get(se service.Service) error {
 	}
 
 	if _, exists := s.data[se.Key()]; !exists {
-		fmt.Println("Not found")
+		fmt.Println("Service not found")
 		return nil
 	}
 

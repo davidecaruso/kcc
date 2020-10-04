@@ -37,6 +37,16 @@ var getCmd = &cobra.Command{
 kcc get -s facebook.com -u john@doe.com
 kcc get -s 176.69.100.144 -u johndoe`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if s.User == "" || len(s.User) == 0 {
+			fmt.Println("Invalid user")
+			return
+		}
+
+		if s.Service == "" || len(s.Service) == 0 {
+			fmt.Println("Invalid service")
+			return
+		}
+
 		if err := storage.S.Get(s); err != nil {
 			fmt.Println(err)
 		} else {
@@ -48,5 +58,5 @@ kcc get -s 176.69.100.144 -u johndoe`,
 func init() {
 	rootCmd.AddCommand(getCmd)
 	getCmd.Flags().StringVarP(&s.User, "user", "u", "", "The user name")
-	getCmd.Flags().StringVarP(&s.Host, "service", "s", "", "The service name")
+	getCmd.Flags().StringVarP(&s.Service, "service", "s", "", "The service name")
 }

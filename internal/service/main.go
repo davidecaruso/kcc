@@ -28,12 +28,12 @@ import (
 
 type Service struct {
 	User     string `json:"user"`
-	Host     string `json:"host"`
+	Service  string `json:"service"`
 	Password string `json:"password"`
 }
 
 func (s Service) Key() string {
-	text := s.User + s.Host
+	text := s.User + s.Service
 	hash := md5.New()
 	hash.Write([]byte(text))
 	return hex.EncodeToString(hash.Sum(nil))
