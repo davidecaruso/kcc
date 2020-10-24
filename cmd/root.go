@@ -32,10 +32,10 @@ import (
 )
 
 var (
-	cwd, _  = os.Getwd()
 	config  string
+	home, _ = homedir.Dir()
 	Verbose bool
-	Storage = storage.Storage{Path: cwd + "/assets/.storage"}
+	Storage = storage.Storage{Path: home + "/.kcc.storage"}
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -69,13 +69,6 @@ func initConfig() {
 		// Use config file from the flag.
 		viper.SetConfigFile(config)
 	} else {
-		// Find home directory.
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
 		// Search config in home directory with name ".kcc" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigName(".kcc")
