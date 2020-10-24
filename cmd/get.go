@@ -23,15 +23,13 @@ package cmd
 
 import (
 	"fmt"
-	"kcc/internal/storage"
-
 	"github.com/spf13/cobra"
 )
 
 // getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "Get password",
+	Short: "get password",
 	Long: `Examples:
 
 kcc get -s facebook.com -u john@doe.com
@@ -47,7 +45,7 @@ kcc get -s 176.69.100.144 -u johndoe`,
 			return
 		}
 
-		if err := storage.S.Get(s); err != nil {
+		if err := Storage.Get(s); err != nil {
 			fmt.Println(err)
 		} else {
 			fmt.Println("Ok")

@@ -34,17 +34,16 @@ import (
 )
 
 type Storage struct {
-	path string
+	Path string
 	data map[string]service.Service
 }
 
 var (
-	cwd, _ = os.Getwd()
-	S      = Storage{path: cwd + "/assets/.storage"}
+	S = Storage{}
 )
 
 func (s *Storage) lock() error {
-	cmd := exec.Command("/bin/sh", "-c", "sudo chown 0:0 "+s.path)
+	cmd := exec.Command("/bin/sh", "-c", "sudo chown 0:0 "+s.Path)
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -54,7 +53,7 @@ func (s *Storage) lock() error {
 func (s *Storage) unlock() error {
 	uid := strconv.Itoa(os.Getuid())
 	gid := strconv.Itoa(os.Getgid())
-	cmd := exec.Command("/bin/sh", "-c", "sudo chown "+uid+":"+gid+" "+s.path)
+	cmd := exec.Command("/bin/sh", "-c", "sudo chown "+uid+":"+gid+" "+s.Path)
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -62,9 +61,9 @@ func (s *Storage) unlock() error {
 }
 
 func (s *Storage) create() error {
-	if _, err := os.Stat(s.path); err != nil {
+	if _, err := os.Stat(s.Path); err != nil {
 		if os.IsNotExist(err) {
-			if err = ioutil.WriteFile(s.path, []byte("{}"), 0600); err != nil {
+			if err = ioutil.WriteFile(s.Path, []byte("{}"), 0600); err != nil {
 				return err
 			}
 		}
@@ -85,21 +84,21 @@ func (s *Storage) update() (bool, error) {
 	if err := s.unlock(); err != nil {
 		return false, err
 	}
-	err = ioutil.WriteFile(s.path, data, 0600)
+	err = ioutil.WriteFile(s.Path, data, 0600)
 	if err != nil {
 		return false, err
 	}
 	return true, s.lock()
 }
 
-func (s *Storage) load() error {
+func (s *Storage) Load() error {
 	if err := s.create(); err != nil {
 		return err
 	}
 	if err := s.unlock(); err != nil {
 		return err
 	}
-	file, err := ioutil.ReadFile(s.path)
+	file, err := ioutil.ReadFile(s.Path)
 	if err != nil {
 		return err
 	}
@@ -110,7 +109,7 @@ func (s *Storage) load() error {
 }
 
 func (s *Storage) Add(se service.Service) (bool, error) {
-	if err := s.load(); err != nil {
+	if err := s.Load(); err != nil {
 		return false, err
 	}
 
@@ -125,7 +124,7 @@ func (s *Storage) Add(se service.Service) (bool, error) {
 }
 
 func (s *Storage) Get(se service.Service) error {
-	if err := s.load(); err != nil {
+	if err := s.Load(); err != nil {
 		return err
 	}
 
@@ -138,7 +137,7 @@ func (s *Storage) Get(se service.Service) error {
 }
 
 func (s *Storage) Delete(se service.Service) (bool, error) {
-	if err := s.load(); err != nil {
+	if err := s.Load(); err != nil {
 		return false, err
 	}
 
@@ -149,11 +148,4 @@ func (s *Storage) Delete(se service.Service) (bool, error) {
 	}
 
 	return s.update()
-}
-
-func init() {
-	if err := S.load(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
 }

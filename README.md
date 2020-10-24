@@ -10,14 +10,16 @@ Usage:
   kcc [command]
 
 Available Commands:
-  add         Store service credentials
-  del         Delete service credentials
-  get         Get password
+  add         store service credentials
+  del         delete service credentials
+  get         get password
   help        Help about any command
   version     Show current version
 
 Flags:
-  -h, --help   help for kcc
+      --config string   config file (default is $HOME/.kcc.yaml)
+  -h, --help            help for kcc
+  -v, --verbose         verbose output
 
 Use "kcc [command] --help" for more information about a command.
 ```

@@ -24,13 +24,19 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"kcc/internal/storage"
 	"os"
 
-	homedir "github.com/mitchellh/go-homedir"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
+var (
+	cwd, _  = os.Getwd()
+	config  string
+	Verbose bool
+	Storage = storage.Storage{Path: cwd + "/assets/.storage"}
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -40,9 +46,6 @@ var rootCmd = &cobra.Command{
 
 kcc add -s facebook.com -u john@doe.com
 kcc get -s facebook.com -u john@doe.com`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -56,13 +59,15 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
+	rootCmd.PersistentFlags().StringVar(&config, "config", "", "config file (default is $HOME/.kcc.yaml)")
+	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	if cfgFile != "" {
+	if config != "" {
 		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
+		viper.SetConfigFile(config)
 	} else {
 		// Find home directory.
 		home, err := homedir.Dir()
@@ -80,6 +85,12 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		if Verbose {
+			fmt.Println("Config file found:", viper.ConfigFileUsed())
+		}
+
+		if viper.InConfig("storage") && viper.GetString("storage") != "" {
+			Storage.Path = viper.GetString("storage")
+		}
 	}
 }
