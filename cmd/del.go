@@ -23,15 +23,13 @@ package cmd
 
 import (
 	"fmt"
-	"kcc/internal/storage"
-
 	"github.com/spf13/cobra"
 )
 
 // delCmd represents the del command
 var delCmd = &cobra.Command{
 	Use:   "del",
-	Short: "Delete service credentials",
+	Short: "delete service credentials",
 	Long: `Examples:
 
 kcc del -s facebook.com -u john@doe.com
@@ -47,7 +45,7 @@ kcc del -s 176.69.100.144 -u johndoe`,
 			return
 		}
 
-		if _, err := storage.S.Delete(s); err != nil {
+		if _, err := Storage.Delete(s); err != nil {
 			fmt.Println(err)
 		} else {
 			fmt.Println("Ok")

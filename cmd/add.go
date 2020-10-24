@@ -25,8 +25,8 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"kcc/internal/service"
-	"kcc/internal/storage"
 	"kcc/tools"
+	"strings"
 )
 
 var s service.Service
@@ -34,7 +34,7 @@ var s service.Service
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add",
-	Short: "Store service credentials",
+	Short: "store service credentials",
 	Long: `Examples:
 
 kcc add -s facebook.com -u john@doe.com
@@ -56,8 +56,10 @@ kcc add -s 176.69.100.144 -u johndoe`,
 			return
 		}
 
-		s.Password = password
-		if _, err := storage.S.Add(s); err != nil {
+		s.Password = strings.TrimSuffix(password, "\n")
+		if _, err := Storage.Add(s); err != nil {
+			fmt.Println(err)
+			return
 		} else {
 			fmt.Println("Ok")
 		}
