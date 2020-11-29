@@ -29,7 +29,7 @@ import (
 // delCmd represents the del command
 var delCmd = &cobra.Command{
 	Use:   "del",
-	Short: "delete service credentials",
+	Short: "Delete service credentials",
 	Long: `Examples:
 
 kcc del -s facebook.com -u john@doe.com

@@ -34,7 +34,7 @@ var s service.Service
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add",
-	Short: "store service credentials",
+	Short: "Store service credentials",
 	Long: `Examples:
 
 kcc add -s facebook.com -u john@doe.com
