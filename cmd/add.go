@@ -50,7 +50,7 @@ kcc add -s 176.69.100.144 -u johndoe`,
 			return
 		}
 
-		password, err := tools.Input("Enter service password: ")
+		password, err := tools.Input("Enter service password: ", true)
 		if err != nil {
 			fmt.Println(err)
 			return
