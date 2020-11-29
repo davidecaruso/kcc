@@ -54,7 +54,7 @@ func Input(s string, hide bool) (string, error) {
 	}
 	_, err := fmt.Scan(&input)
 	if hide {
-		fmt.Print("\033[28m" + s)
+		fmt.Print("\033[28m")
 	}
 
 	return input, err
