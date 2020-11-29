@@ -22,19 +22,16 @@ THE SOFTWARE.
 package tools
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strings"
 )
 
 func Confirm(s string) bool {
-	reader := bufio.NewReader(os.Stdin)
-
 	for {
 		fmt.Printf("%s [y/n]: ", s)
 
-		response, err := reader.ReadString('\n')
+		var response string
+		_, err := fmt.Scan(&response)
 		if err != nil {
 			return false
 		}
@@ -49,8 +46,16 @@ func Confirm(s string) bool {
 	}
 }
 
-func Input(s string) (string, error) {
-	reader := bufio.NewReader(os.Stdin)
+func Input(s string, hide bool) (string, error) {
+	var input string
 	fmt.Print(s)
-	return reader.ReadString('\n')
+	if hide {
+		fmt.Print("\033[8m")
+	}
+	_, err := fmt.Scan(&input)
+	if hide {
+		fmt.Print("\033[28m")
+	}
+
+	return input, err
 }

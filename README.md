@@ -11,11 +11,11 @@ Usage:
   kcc [command]
 
 Available Commands:
-  add         store service credentials
-  del         delete service credentials
-  get         get password
+  add         Store service credentials
+  del         Delete service credentials
+  get         Copy password in clipboard
   help        Help about any command
-  version     show current version
+  version     Show current version
 
 Flags:
       --config string   config file (default is $HOME/.kcc.yaml)

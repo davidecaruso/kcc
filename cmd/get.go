@@ -29,7 +29,7 @@ import (
 // getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "get password",
+	Short: "Copy password in clipboard",
 	Long: `Examples:
 
 kcc get -s facebook.com -u john@doe.com
